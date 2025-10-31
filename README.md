@@ -27,7 +27,7 @@ Ini adalah REST API untuk _take-home test_ yang mengelola layanan PPOB (Payment 
 
 ## ER Diagram
 
-![ER Diagram](./erd.png)
+![ER Diagram](./er-diagram.png)
 
 atau dapat diakses melalui [link ini](https://dbdiagram.io/d/nutech-integrasi-685ff456f413ba35084eca17).
 
