@@ -7,15 +7,27 @@ class TransactionRepository {
     async create(transactionData, connection = null) {
         try {
             const dbConnection = connection || db;
-            const { id, user_id, invoice_number, transaction_type, description, total_amount } = transactionData;
+            const { user_id, invoice_number, transaction_type, description, total_amount } = transactionData;
 
-            await dbConnection.execute(
-                `INSERT INTO transactions (id, user_id, invoice_number, transaction_type, description, total_amount, created_at) 
-         VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-                [id, user_id, invoice_number, transaction_type, description, total_amount]
-            );
+            const sql = `INSERT INTO transactions (user_id, invoice_number, transaction_type, description, total_amount, created_at) 
+                         VALUES (?, ?, ?, ?, ?, NOW())`;
 
-            return await this.findById(id, dbConnection);
+            const [result] = await dbConnection.execute(sql, [user_id, invoice_number, transaction_type, description, total_amount]);
+
+            return result.insertId;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Update invoice number (Langkah 2: Perbarui invoice)
+     */
+    async updateInvoiceNumber(id, invoiceNumber, connection = null) {
+        try {
+            const dbConnection = connection || db;
+            const sql = "UPDATE transactions SET invoice_number = ? WHERE id = ?";
+            await dbConnection.execute(sql, [invoiceNumber, id]);
         } catch (error) {
             throw error;
         }

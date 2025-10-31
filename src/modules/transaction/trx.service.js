@@ -48,20 +48,23 @@ class TransactionService {
                 throw error;
             }
 
-            const invoiceNumber = generateInvoiceNumber();
-
-            const newBalance = await userRepository.addBalance(userId, amount, connection);
+            const tempInvoice = `TEMP-${Date.now()}`;
 
             const transactionData = {
-                id: uuidv4(),
                 user_id: userId,
-                invoice_number: invoiceNumber,
+                invoice_number: tempInvoice,
                 transaction_type: "TOPUP",
                 description: "Top Up Balance",
                 total_amount: amount,
             };
 
-            await transactionRepository.create(transactionData, connection);
+            const newTransactionId = await transactionRepository.create(transactionData, connection);
+
+            const finalInvoiceNumber = generateInvoiceNumber(newTransactionId);
+
+            await transactionRepository.updateInvoiceNumber(newTransactionId, finalInvoiceNumber, connection);
+
+            const newBalance = await userRepository.addBalance(userId, amount, connection);
 
             await connection.commit();
 
@@ -104,35 +107,27 @@ class TransactionService {
                 throw error;
             }
 
-            let invoiceNumber;
-            let attempts = 0;
-            const maxAttempts = 5;
-
-            do {
-                invoiceNumber = generateInvoiceNumber();
-                attempts++;
-
-                if (attempts > maxAttempts) {
-                    const error = new Error("Gagal generate invoice number");
-                    error.status = 500;
-                    throw error;
-                }
-            } while (await transactionRepository.invoiceNumberExists(invoiceNumber));
-
-            await userRepository.subtractBalance(userId, service.service_tariff, connection);
+            const tempInvoice = `TEMP-${Date.now()}`;
 
             const transactionData = {
-                id: uuidv4(),
                 user_id: userId,
-                invoice_number: invoiceNumber,
+                invoice_number: tempInvoice,
                 transaction_type: "PAYMENT",
                 description: service.service_name,
                 total_amount: service.service_tariff,
             };
 
-            const transaction = await transactionRepository.create(transactionData, connection);
+            const newTransactionId = await transactionRepository.create(transactionData, connection);
+
+            const finalInvoiceNumber = generateInvoiceNumber(newTransactionId);
+
+            await transactionRepository.updateInvoiceNumber(newTransactionId, finalInvoiceNumber, connection);
+
+            await userRepository.subtractBalance(userId, service.service_tariff, connection);
 
             await connection.commit();
+
+            const transaction = await transactionRepository.findById(newTransactionId);
 
             return {
                 invoice_number: transaction.invoice_number,

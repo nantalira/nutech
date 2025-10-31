@@ -2,7 +2,7 @@ module.exports = {
     up: async (connection) => {
         const sql = `
       CREATE TABLE transactions (
-        id CHAR(36) PRIMARY KEY,
+        id BIGINT PRIMARY KEY AUTO_INCREMENT,
         invoice_number varchar(100) UNIQUE NOT NULL COMMENT 'Nomor invoice unik',
         user_id CHAR(36) NOT NULL COMMENT 'Foreign key ke tabel users', 
         transaction_type ENUM ('TOPUP', 'PAYMENT') NOT NULL COMMENT 'Jenis transaksi: TOPUP atau PAYMENT',

@@ -1,9 +1,4 @@
-/**
- * Generate invoice number with format INV{DDMMYYYY}-{001}
- * Auto-increment counter per day, reset counter every new day
- * @returns {string} - The generated invoice number
- */
-const generateInvoiceNumber = () => {
+const generateInvoiceNumber = (transactionId) => {
     const now = new Date();
 
     // Format: DDMMYYYY
@@ -12,9 +7,7 @@ const generateInvoiceNumber = () => {
     const year = now.getFullYear();
     const dateStr = `${day}${month}${year}`;
 
-    // Generate random 3-digit number for simplicity
-    // In production, this should be stored in database with proper increment logic
-    const counter = String(Math.floor(Math.random() * 900) + 100);
+    const counter = String(transactionId).padStart(3, "0");
 
     return `INV${dateStr}-${counter}`;
 };
