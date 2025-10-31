@@ -38,7 +38,7 @@ router.get("/", (_, res) => {
                 },
             },
             documentation: {
-                swagger: "/api-docs",
+                swagger: "/api/v1/api-docs",
             },
         },
     });

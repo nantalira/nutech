@@ -45,16 +45,16 @@ app.use(
     })
 );
 
+// Root redirect to API
+app.get("/", (_, res) => {
+    res.redirect("/api/v1");
+});
+
 // Static files
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // API routes
 app.use("/api/v1", indexRouter);
-
-// Root redirect to API
-app.get("/", (_, res) => {
-    res.redirect("/api/v1");
-});
 
 // Load API documentation
 let apiSpec;
@@ -76,7 +76,7 @@ try {
 
 // Swagger UI routes
 app.use(
-    "/api-docs",
+    "/api/v1/api-docs",
     swaggerUi.serve,
     swaggerUi.setup(apiSpec, {
         explorer: true,
