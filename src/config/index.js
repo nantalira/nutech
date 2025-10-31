@@ -12,6 +12,7 @@ const config = {
     jwtSecret: process.env.JWT_SECRET || "your-super-secret-key",
     uploadPath: process.env.UPLOAD_PATH || "public/images/profiles",
     baseUrl: process.env.BASE_URL || "http://localhost:3000",
+    corsOrigin: process.env.CORS_ORIGIN || "http://localhost:3000",
 };
 
 module.exports = config;
