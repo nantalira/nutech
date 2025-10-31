@@ -4,6 +4,7 @@ const { generateToken } = require("../../utils/jwt.helper");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const fs = require("fs").promises;
+const config = require("../../config");
 
 class UserService {
     /**
@@ -129,10 +130,13 @@ class UserService {
 
             const fileExtension = path.extname(file.originalname);
             const fileName = `profile_${userId}_${Date.now()}${fileExtension}`;
-            const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-            const profileImageUrl = `${baseUrl}/images/${fileName}`;
+            const baseUrl = config.baseUrl || "http://localhost:3000";
 
-            const uploadPath = path.join(__dirname, "../../../public/images");
+            console.log("Upload Path:", config.uploadPath);
+            console.log("File Name:", fileName);
+            const profileImageUrl = `${baseUrl}/images/profiles/${fileName}`;
+
+            const uploadPath = config.uploadPath || path.join(__dirname, "../../../public/images/profiles/");
             const filePath = path.join(uploadPath, fileName);
 
             await fs.mkdir(uploadPath, { recursive: true });
