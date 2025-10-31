@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "npm run migrate && npm run seed && node ./bin/www",
+        "start": "npm run migrate:fresh && npm run seed && node ./bin/www",
         "dev": "nodemon ./bin/www",
         "migrate": "node src/database/migration-system/migrator.js migrate",
         "migrate:rollback": "node src/database/migration-system/migrator.js rollback",
