@@ -136,8 +136,8 @@ class TransactionService {
 
             return {
                 invoice_number: transaction.invoice_number,
-                service_code: transaction.service_code,
-                service_name: transaction.service_name,
+                service_code: service.service_code,
+                service_name: transaction.description,
                 transaction_type: transaction.transaction_type,
                 total_amount: transaction.total_amount,
                 created_on: transaction.created_at,

@@ -11,6 +11,7 @@ const indexRouter = require("./routes");
 
 // Import error handlers
 const { globalErrorHandler, notFoundHandler } = require("./utils/error.handler");
+const config = require("./config");
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
     cors({
-        origin: process.env.NODE_ENV === "production" ? ["https://your-domain.com"] : ["http://localhost:3000", "http://localhost:3001"],
+        origin: config.environment === "production" ? [config.baseUrl] : ["http://localhost:3000", "http://localhost:3001"],
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
