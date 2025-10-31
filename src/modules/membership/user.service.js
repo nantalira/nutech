@@ -56,7 +56,7 @@ class UserService {
                 throw error;
             }
 
-            const token = generateToken({ userId: user.id, email: user.email });
+            const token = generateToken({ email: user.email });
 
             return { token };
         } catch (error) {
